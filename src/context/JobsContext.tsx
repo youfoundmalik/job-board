@@ -1,20 +1,22 @@
 "use client";
 
-import { createContext, ReactNode, useState, useCallback, useEffect } from "react";
-import { JobFilterParams, JobModel } from "@/lib/models";
-import { getAllJobs } from "@/services/job-service";
-import { defaultJobsParams } from "@/lib/constants";
+import { createContext, ReactNode, useMemo, useState } from "react";
+import { JobModel } from "@/lib/models";
 
 // Define the type for our context state
 interface JobsContextType {
-  isLoading: boolean;
   error: Error | null;
   setError: (error: Error | null) => void;
   jobs: JobModel[];
   setJobs: (jobs: JobModel[]) => void;
-  jobsParams: JobFilterParams;
-  setJobsParams: (jobsParams: JobFilterParams) => void;
-  fetchJobs: (params?: JobFilterParams) => Promise<void>;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalItems: number;
+  itemsPerPage: number;
+  totalPages: number;
+  paginatedJobs: JobModel[];
 }
 
 // Create the context with a default value
@@ -22,53 +24,39 @@ const JobsContext = createContext<JobsContextType | undefined>(undefined);
 
 // Create a provider component
 export function JobsContextProvider({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [jobs, setJobs] = useState<JobModel[]>([]);
-  const [jobsParams, setJobsParams] = useState<JobFilterParams>(defaultJobsParams);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
-  const fetchJobs = useCallback(
-    async (params = jobsParams) => {
-      setError(null);
-      const payload = Object.fromEntries(
-        Object.entries(params).filter((entry) => {
-          if (Array.isArray(entry[1])) {
-            return entry[1].length > 0 && entry[1][0] !== "";
-          }
-          return entry[1] !== "";
-        })
-      );
-
-      console.log(payload);
-      // return;
-      try {
-        setIsLoading(true);
-        const response = await getAllJobs(payload);
-        setJobs(response);
-        setJobsParams(params);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [jobsParams]
-  );
-
-  useEffect(() => {
-    fetchJobs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Internal pagination (Api isn't paginated)
+  const { paginatedJobs, totalPages, totalItems } = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return {
+      paginatedJobs: jobs.slice(start, end),
+      totalPages: Math.ceil(jobs.length / itemsPerPage),
+      totalItems: jobs.length,
+    };
+  }, [jobs, currentPage, itemsPerPage]);
 
   const value = {
-    isLoading,
     error,
-    setError,
+    setError: (error: Error | null) => {
+      setIsLoading(true);
+      setError(error);
+    },
     jobs,
     setJobs,
-    jobsParams,
-    setJobsParams,
-    fetchJobs,
+    isLoading,
+    setIsLoading,
+    currentPage,
+    setCurrentPage,
+    totalItems,
+    itemsPerPage,
+    totalPages,
+    paginatedJobs,
   };
 
   return <JobsContext.Provider value={value}>{children}</JobsContext.Provider>;

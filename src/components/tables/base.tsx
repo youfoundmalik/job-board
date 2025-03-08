@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, ReactNode, TableHTMLAttributes } from "react";
-import Pagination from "./pagination";
 import NoData from "./empty";
 
 interface TableBaseProps extends TableHTMLAttributes<HTMLTableElement> {
@@ -11,7 +10,7 @@ interface TableBaseProps extends TableHTMLAttributes<HTMLTableElement> {
   emptyDescription?: ReactNode;
   emptyTitle?: string;
   isLoading: boolean;
-  hidePagination?: boolean;
+  pagination?: ReactNode;
 }
 
 const TableBase: React.FC<TableBaseProps> = ({
@@ -22,7 +21,7 @@ const TableBase: React.FC<TableBaseProps> = ({
   emptyDescription,
   isLoading,
   count,
-  hidePagination = false,
+  pagination,
   ...tableProps
 }) => {
   return (
@@ -31,7 +30,7 @@ const TableBase: React.FC<TableBaseProps> = ({
         <table className={`w-full overflow-x-auto ${className}`} {...tableProps}>
           {children}
         </table>
-        {!hidePagination && count > 10 && <Pagination currentPage={1} totalPages={10} onPageChange={() => {}} />}
+        {pagination}
       </div>
       {!isLoading && count === 0 && (
         <div className='flex-grow flex items-center justify-center pb-8'>

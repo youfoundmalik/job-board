@@ -1,16 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/common";
 import errorImg from "../../public/images/error-image.svg";
 import { useJobsContext } from "@/hooks/useJobContext";
-import { Button } from "@/components/common";
 
 export default function ErrorPage({ reset }: { error: Error; reset: () => void }) {
-  const { fetchJobs } = useJobsContext();
+  const router = useRouter();
+  const { setError } = useJobsContext();
 
   const handleReset = () => {
-    fetchJobs();
+    setError(null);
     reset();
+    router.refresh();
   };
 
   return (
