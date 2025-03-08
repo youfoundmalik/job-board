@@ -1,3 +1,3 @@
 export const config = {
-  baseURL: "https://api.candivet.com",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 };
