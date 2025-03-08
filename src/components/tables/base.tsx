@@ -1,22 +1,44 @@
 "use client";
 
-import { ReactNode, TableHTMLAttributes } from "react";
+import { Fragment, ReactNode, TableHTMLAttributes } from "react";
 import Pagination from "./pagination";
+import NoData from "./empty";
 
 interface TableBaseProps extends TableHTMLAttributes<HTMLTableElement> {
   children?: ReactNode;
-  hidePagination?: boolean;
+  count: number;
   containerClassName?: string;
+  emptyDescription?: ReactNode;
+  emptyTitle?: string;
+  isLoading: boolean;
+  hidePagination?: boolean;
 }
 
-const TableBase: React.FC<TableBaseProps> = ({ children, className = "", hidePagination = false, containerClassName = "", ...tableProps }) => {
+const TableBase: React.FC<TableBaseProps> = ({
+  children,
+  className = "",
+  containerClassName = "",
+  emptyTitle,
+  emptyDescription,
+  isLoading,
+  count,
+  hidePagination = false,
+  ...tableProps
+}) => {
   return (
-    <div className={`w-full flex flex-col gap-4 flex-grow justify-between ${containerClassName} hide-scrollbar overflow-x-scroll`}>
-      <table className={`w-full overflow-x-auto ${className}`} {...tableProps}>
-        {children}
-      </table>
-      {!hidePagination && <Pagination currentPage={1} totalPages={10} onPageChange={() => {}} />}
-    </div>
+    <Fragment>
+      <div className={`w-full flex flex-col gap-4 flex-grow justify-between hide-scrollbar overflow-x-auto ${containerClassName}`}>
+        <table className={`w-full overflow-x-auto ${className}`} {...tableProps}>
+          {children}
+        </table>
+        {!hidePagination && count > 10 && <Pagination currentPage={1} totalPages={10} onPageChange={() => {}} />}
+      </div>
+      {!isLoading && count === 0 && (
+        <div className='flex-grow flex items-center justify-center pb-8'>
+          <NoData title={emptyTitle} subText={emptyDescription} />
+        </div>
+      )}
+    </Fragment>
   );
 };
 
@@ -41,7 +63,7 @@ interface TableHeaderCellProps extends React.HTMLAttributes<HTMLTableHeaderCellE
 export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ children, className = "", ...headerCellProps }) => {
   return (
     <th
-      className={`text-left text-sm font-bold text-base-gray-800 bg-base-gray-500 py-3 px-5 min-w-fit text-nowrap ${className}`}
+      className={`text-left text-sm first:rounded-l-lg last:rounded-r-lg font-bold text-base-gray-800 bg-base-gray-500 py-3 px-5 min-w-fit text-nowrap ${className}`}
       {...headerCellProps}
     >
       {children}

@@ -2,7 +2,7 @@
 
 import { createContext, ReactNode, useState, useCallback, useEffect } from "react";
 import { JobFilterParams, JobModel } from "@/lib/models";
-import { getAllJobs } from "@/app/services/job-service";
+import { getAllJobs } from "@/services/job-service";
 import { defaultJobsParams } from "@/lib/constants";
 
 // Define the type for our context state
@@ -14,7 +14,7 @@ interface JobsContextType {
   setJobs: (jobs: JobModel[]) => void;
   jobsParams: JobFilterParams;
   setJobsParams: (jobsParams: JobFilterParams) => void;
-  fetchJobs: () => Promise<void>;
+  fetchJobs: (params?: JobFilterParams) => Promise<void>;
 }
 
 // Create the context with a default value
@@ -27,32 +27,38 @@ export function JobsContextProvider({ children }: { children: ReactNode }) {
   const [jobs, setJobs] = useState<JobModel[]>([]);
   const [jobsParams, setJobsParams] = useState<JobFilterParams>(defaultJobsParams);
 
-  const fetchJobs = useCallback(async () => {
-    const payload = Object.fromEntries(
-      Object.entries(jobsParams).filter((entry) => {
-        if (Array.isArray(entry[1])) {
-          return entry[1].length > 0;
-        }
-        return entry[1] !== "";
-      })
-    );
+  const fetchJobs = useCallback(
+    async (params = jobsParams) => {
+      setError(null);
+      const payload = Object.fromEntries(
+        Object.entries(params).filter((entry) => {
+          if (Array.isArray(entry[1])) {
+            return entry[1].length > 0 && entry[1][0] !== "";
+          }
+          return entry[1] !== "";
+        })
+      );
 
-    console.log(payload);
-    return;
-    try {
-      setIsLoading(true);
-      const response = await getAllJobs(payload);
-      setJobs(response);
-    } catch (error) {
-      setError(error as Error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [jobsParams]);
+      console.log(payload);
+      // return;
+      try {
+        setIsLoading(true);
+        const response = await getAllJobs(payload);
+        setJobs(response);
+        setJobsParams(params);
+      } catch (error) {
+        setError(error as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [jobsParams]
+  );
 
   useEffect(() => {
     fetchJobs();
-  }, [fetchJobs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const value = {
     isLoading,

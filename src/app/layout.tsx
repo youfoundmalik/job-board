@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { JobsContextProvider } from '@/context/JobsContext';
+import { JobsContextProvider } from "@/context/JobsContext";
 
 const inter = Inter({
   variable: "--font-inter",
