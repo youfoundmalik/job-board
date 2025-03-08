@@ -11,7 +11,7 @@ interface TableBaseProps extends TableHTMLAttributes<HTMLTableElement> {
 
 const TableBase: React.FC<TableBaseProps> = ({ children, className = "", hidePagination = false, containerClassName = "", ...tableProps }) => {
   return (
-    <div className={`w-full flex flex-col gap-4 flex-grow justify-between ${containerClassName}`}>
+    <div className={`w-full flex flex-col gap-4 flex-grow justify-between ${containerClassName} hide-scrollbar overflow-x-scroll`}>
       <table className={`w-full overflow-x-auto ${className}`} {...tableProps}>
         {children}
       </table>
@@ -28,7 +28,7 @@ interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {
 
 export const TableCell: React.FC<TableCellProps> = ({ children, className = "", ...cellProps }) => {
   return (
-    <td className={`text-left text-base font-normal text-foreground bg-white py-1.5 px-5 ${className}`} {...cellProps}>
+    <td className={`text-left text-sm md:text-base font-normal text-foreground bg-white py-1.5 px-5 ${className}`} {...cellProps}>
       {children}
     </td>
   );
@@ -40,7 +40,10 @@ interface TableHeaderCellProps extends React.HTMLAttributes<HTMLTableHeaderCellE
 
 export const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ children, className = "", ...headerCellProps }) => {
   return (
-    <th className={`text-left text-sm font-bold text-base-gray-800 bg-base-gray-500 py-3 px-5 ${className}`} {...headerCellProps}>
+    <th
+      className={`text-left text-sm font-bold text-base-gray-800 bg-base-gray-500 py-3 px-5 min-w-fit text-nowrap ${className}`}
+      {...headerCellProps}
+    >
       {children}
     </th>
   );

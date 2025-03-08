@@ -3,7 +3,7 @@ import { AddIcon, Button, Input, SearchIcon } from "../common";
 
 const Header = () => {
   return (
-    <div className='px-8 pb-4 pt-6 flex items-center justify-between border-b border-base-gray-100'>
+    <div className='md:px-8 pb-4 pt-6 flex items-center justify-between border-b border-base-gray-100'>
       <Input
         icon={<SearchIcon />}
         containerClass='w-full md:w-[340px] !rounded-full !bg-base-gray-200'
