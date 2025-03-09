@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { Input, Select } from "@/components/common";
 import { useJobsContext } from "@/hooks/useJobContext";
-import { jobTypes } from "@/lib/constants";
-import { JobFilterParams } from "@/lib/models";
+import { jobTypes } from "@/utils/constants";
+import { JobFilterParams } from "@/types/job";
 
 let timeout: NodeJS.Timeout;
 
@@ -35,7 +35,7 @@ export default function JobFilters({ isLoading, params }: { isLoading: boolean; 
     timeout = setTimeout(() => {
       setIsLoading(true);
       router.push(`/?${params.toString()}`);
-    }, 1000);
+    }, 500);
   };
 
   return (

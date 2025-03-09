@@ -1,4 +1,4 @@
-import { RequestMethod } from "@/lib/models";
+import { RequestMethod } from "@/types/api";
 
 export class AppAPIs {
   static getJobs: RequestMethod = {

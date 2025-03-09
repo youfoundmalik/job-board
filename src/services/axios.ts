@@ -1,4 +1,4 @@
-import { config } from "@/lib/config";
+import { config } from "@/utils/config";
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
 
 // Define base API configuration

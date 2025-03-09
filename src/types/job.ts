@@ -1,10 +1,3 @@
-export type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-
-export interface RequestMethod {
-  method: HTTPMethod;
-  url: string;
-}
-
 export interface JobFilterParams {
   page?: number;
   search_term?: string;
@@ -53,36 +46,5 @@ export interface JobModel {
   created_at: string;
   updated_at: string;
   total_applicants: number;
-  user: User;
   company_logo?: string;
-  questions: Question[];
-}
-
-export interface User {
-  id: string;
-  reference?: string;
-  created_at: string;
-  updated_at: string;
-  name: string;
-  email: string;
-  role: string;
-  is_verified: boolean;
-  channel: string;
-  last_name?: string;
-  country_code?: string;
-  phone?: string;
-  profile_picture: string;
-  calendly_link: string;
-  google_calender_link: string;
-  username: string;
-  location?: string;
-  last_login?: string;
-}
-
-export interface Question {
-  id: string;
-  reference: string;
-  created_at: string;
-  updated_at: string;
-  text: string;
 }

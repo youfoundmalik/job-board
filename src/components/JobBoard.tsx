@@ -6,7 +6,7 @@ import JobFilters from "./JobFilters";
 import Header from "@/components/layout/Header";
 import { JobsTable } from "@/components/tables";
 import { useJobsContext } from "@/hooks/useJobContext";
-import { JobFilterParams, JobModel } from "@/lib/models";
+import { JobFilterParams, JobModel } from "@/types/job";
 
 interface JobBoardProps {
   initialJobs: JobModel[];

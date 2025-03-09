@@ -1,11 +1,11 @@
 import moment from "moment";
-import Image from "next/image";
 import { Fragment, memo } from "react";
 import { useRouter } from "next/navigation";
 
 import TableBase, { TableCell, TableHeaderCell } from "./base";
 import { useJobsContext } from "@/hooks/useJobContext";
-import { JobModel } from "@/lib/models";
+import { OptimizedImage } from "../common/Image";
+import { JobModel } from "@/types/job";
 import Pagination from "./pagination";
 
 let timeout: NodeJS.Timeout;
@@ -117,9 +117,11 @@ LoadingSkeleton.displayName = "LoadingSkeleton";
 const JobRow = memo(({ job }: { job: JobModel }) => (
   <tr>
     <TableCell className='!px-0 min-w-[270px] max-w-[350px]'>
-      <div className='px-2.5 py-2 rounded-lg bg-base-gray-300 box-border flex items-start gap-2.5'>
-        <div className='w-9.5 h-9.5 box-border relative p-5 rounded-full bg-white flex items-center justify-center'>
-          {job.company_logo && <Image src={job.company_logo} alt={job.company_name ?? "logo"} fill className='object-contain' />}
+      <div className='px-2.5 py-3 rounded-lg bg-base-gray-300 box-border flex items-start gap-2.5'>
+        <div className='w-9.5 h-9.5 box-border relative rounded-full overflow-clip bg-white flex items-center justify-center'>
+          {job.company_logo && (
+            <OptimizedImage src={job.company_logo} alt={job.company_name ?? "logo"} width={32} height={32} className='object-contain' />
+          )}
         </div>
         <div className='flex flex-col gap-1'>
           <p className='text-base-black font-medium text-sm md:text-base line-clamp-1'>{job.job_title}</p>

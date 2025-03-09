@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, ReactNode, useMemo, useState } from "react";
-import { JobModel } from "@/lib/models";
+import { JobModel } from "@/types/job";
 
 // Define the type for our context state
 interface JobsContextType {

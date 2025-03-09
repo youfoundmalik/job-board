@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/common";
 import errorImg from "../../public/images/error-image.svg";
 import { useJobsContext } from "@/hooks/useJobContext";
+import { OptimizedImage } from "@/components/common/Image";
 
 export default function ErrorPage({ reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function ErrorPage({ reset }: { error: Error; reset: () => void }
 
   return (
     <div className='w-full h-[100dvh] flex items-center justify-center flex-col gap-2'>
-      <Image src={errorImg} alt='No data' width={100} height={100} className='w-[350px]' />
+      <OptimizedImage src={errorImg} alt='No data' width={100} height={100} className='w-[350px]' />
       <h4 className='text-base-black font-semibold text-xl md:text-2xl mt-2'>Something went wrong!</h4>
       <p className='text-base-gray-800 text-sm text-center'>Failed to fetch jobs at this time.</p>
       <Button

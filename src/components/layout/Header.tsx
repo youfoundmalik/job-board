@@ -28,7 +28,7 @@ const Header = () => {
       setIsLoading(true);
       router.push(`/?${params.toString()}`);
       return () => clearTimeout(timeout);
-    }, 1000);
+    }, 500);
   };
 
   return (
