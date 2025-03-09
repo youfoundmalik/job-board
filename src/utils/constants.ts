@@ -1,4 +1,4 @@
-import { JobFilterParams } from "./models";
+import { JobFilterParams } from "@/types/job";
 
 export const jobTypes = [
   { label: "Hybrid", value: "hybrid" },

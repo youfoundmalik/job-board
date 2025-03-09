@@ -2,7 +2,7 @@ import { JobBoard } from "@/components/JobBoard";
 import { JobService } from "@/services/job-service";
 import { JobFilterParams } from "@/types/job";
 
-export default async function Home({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default async function Page({ searchParams }: { params: { slug: string }; searchParams: { [key: string]: string | string[] | undefined } }) {
   const params = (await searchParams) ?? {};
 
   // Convert search params to filter params
