@@ -15,7 +15,7 @@ const SelectInput: React.FC<SelectInputProps> = ({ options, className = "", cont
       className={`relative h-11 flex items-center rounded-lg px-4 bg-base-gray-400 border-2 border-transparent cursor-pointer focus-within:border-gray-400 transition-all duration-100 ${containerClass}`}
     >
       <select {...props} className={`w-full h-full cursor-pointer outline-none ring-none text-sm text-base-black ${className}`}>
-        <option disabled selected className='pointer-events-none opacity-50'>
+        <option  value="" >
           {placeholder}
         </option>
         {options.map((option) => (

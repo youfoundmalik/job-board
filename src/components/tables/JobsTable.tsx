@@ -1,20 +1,44 @@
 import moment from "moment";
-import Image from "next/image";
 import { Fragment, memo } from "react";
+import { useRouter } from "next/navigation";
+
 import TableBase, { TableCell, TableHeaderCell } from "./base";
 import { useJobsContext } from "@/hooks/useJobContext";
-import { JobModel } from "@/lib/models";
+import { OptimizedImage } from "../common/Image";
+import { JobModel } from "@/types/job";
+import Pagination from "./pagination";
 
-const JobsTable: React.FC = () => {
-  const { jobs: data, isLoading, fetchJobs } = useJobsContext();
+let timeout: NodeJS.Timeout;
+interface JobsTableProps {
+  isLoading?: boolean;
+}
 
-  const handleResetFilters = () => fetchJobs({});
+const JobsTable: React.FC<JobsTableProps> = ({ isLoading = false }) => {
+  const { paginatedJobs: data, totalItems, currentPage, setCurrentPage, totalPages, setIsLoading } = useJobsContext();
+  const router = useRouter();
+
+  const handleResetFilters = () => {
+    router.push("/");
+  };
+
+  const handlePageChange = (page: number) => {
+    setIsLoading(true);
+    timeout = setTimeout(() => {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setIsLoading(false);
+      return () => clearTimeout(timeout);
+    }, 500);
+  };
 
   return (
     <Fragment>
       <TableBase
-        count={data.length}
+        count={totalItems}
         isLoading={isLoading}
+        pagination={
+          totalPages > 1 && data.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        }
         className='border-separate border-spacing-1/2'
         emptyTitle='No jobs found'
         emptyDescription={
@@ -37,7 +61,7 @@ const JobsTable: React.FC = () => {
           </tr>
         </thead>
         {isLoading ? (
-          <LoadingSkeleton count={data.length || 5} />
+          <LoadingSkeleton count={data.length > 5 ? data.length : 5} />
         ) : (
           data.length > 0 && (
             <tbody className='before:content-[" "] before:block before:h-2'>
@@ -94,10 +118,12 @@ LoadingSkeleton.displayName = "LoadingSkeleton";
 
 const JobRow = memo(({ job }: { job: JobModel }) => (
   <tr>
-    <TableCell className='!px-0 min-w-[270px]'>
-      <div className='px-2.5 py-2 rounded-lg bg-base-gray-300 box-border flex items-start gap-2.5'>
-        <div className='w-9.5 h-9.5 box-border relative p-5 rounded-full bg-white flex items-center justify-center'>
-          {job.company_logo && <Image src={job.company_logo} alt={job.company_name ?? "logo"} fill className='object-contain' />}
+    <TableCell className='!px-0 min-w-[270px] max-w-[350px]'>
+      <div className='px-2.5 py-3 rounded-lg bg-base-gray-300 box-border flex items-start gap-2.5'>
+        <div className='w-9.5 h-9.5 box-border relative rounded-full overflow-clip bg-white flex items-center justify-center'>
+          {job.company_logo && (
+            <OptimizedImage src={job.company_logo} alt={job.company_name ?? "logo"} width={32} height={32} className='object-contain' />
+          )}
         </div>
         <div className='flex flex-col gap-1'>
           <p className='text-base-black font-medium text-sm md:text-base line-clamp-1'>{job.job_title}</p>
@@ -108,9 +134,9 @@ const JobRow = memo(({ job }: { job: JobModel }) => (
       </div>
     </TableCell>
     <TableCell>{job.job_type?.replace("_", " ")}</TableCell>
-    <TableCell>{job.required_skills}</TableCell>
+    <TableCell className='max-w-[300px]'>{job.required_skills}</TableCell>
     <TableCell>{job.languages}</TableCell>
-    <TableCell>{job.tags}</TableCell>
+    <TableCell className='max-w-[270px]'>{job.tags}</TableCell>
   </tr>
 ));
 

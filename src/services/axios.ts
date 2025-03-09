@@ -1,4 +1,4 @@
-import { config } from "@/lib/config";
+import { config } from "@/utils/config";
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
 
 // Define base API configuration
@@ -7,6 +7,7 @@ const baseConfig = {
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
 };
 
@@ -16,7 +17,6 @@ const axiosInstance: AxiosInstance = axios.create(baseConfig);
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // would ideally check for token and add it to the header here
     return config;
   },
   (error: AxiosError) => {
@@ -30,7 +30,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    //Error logging being carried out here (401 unauthorized error can also be handled here)
 
     // Handle 404 Not Found
     if (error.response?.status === 404) {
