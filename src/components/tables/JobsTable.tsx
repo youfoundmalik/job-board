@@ -133,10 +133,10 @@ const JobRow = memo(({ job }: { job: JobModel }) => (
         </div>
       </div>
     </TableCell>
-    <TableCell>{job.job_type?.replace("_", " ")}</TableCell>
-    <TableCell className='max-w-[300px]'>{job.required_skills}</TableCell>
-    <TableCell>{job.languages}</TableCell>
-    <TableCell className='max-w-[270px]'>{job.tags}</TableCell>
+    <TableCell className='line-clamp-3 md:line-clamp-5'>{job.job_type?.replace("_", " ")}</TableCell>
+    <TableCell className='min-w-[300px] w-[300px] line-clamp-3 md:line-clamp-5'>{job.required_skills}</TableCell>
+    <TableCell className='line-clamp-3 md:line-clamp-5'>{job.languages}</TableCell>
+    <TableCell className='min-w-[270px] w-[270px] line-clamp-3 md:line-clamp-5'>{job.tags}</TableCell>
   </tr>
 ));
 
