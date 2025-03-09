@@ -2,8 +2,8 @@ import { JobBoard } from "@/components/JobBoard";
 import { JobService } from "@/services/job-service";
 import { JobFilterParams } from "@/types/job";
 
-export default async function Page({ searchParams }: { params: { slug: string }; searchParams: { [key: string]: string | string[] | undefined } }) {
-  const params = (await searchParams) ?? {};
+export default async function Page({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const params = await searchParams; // Directly await since it's a Promise
 
   // Convert search params to filter params
   const filterParams: JobFilterParams = {
@@ -15,5 +15,9 @@ export default async function Page({ searchParams }: { params: { slug: string };
 
   const initialJobs = await JobService.getAllJobs(filterParams);
 
-  return <JobBoard initialJobs={initialJobs} initialParams={filterParams} />;
+  return (
+    <main>
+      <JobBoard initialJobs={initialJobs} initialParams={filterParams} />
+    </main>
+  );
 }
