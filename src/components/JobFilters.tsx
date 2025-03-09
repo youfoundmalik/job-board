@@ -49,7 +49,7 @@ export default function JobFilters({ isLoading, params }: { isLoading: boolean; 
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex items-center gap-2 md:gap-6 flex-col md:flex-row'>
+    <form onSubmit={handleSubmit} className='flex w-full items-center gap-2 md:gap-6 flex-col md:flex-row'>
       <Input
         value={values.location}
         containerClass='w-full md:w-[218px]'

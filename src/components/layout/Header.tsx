@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <div className='md:px-8 pb-4 pt-6 flex items-center justify-between border-b border-base-gray-100'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='w-full md:w-[340px]'>
         <Input
           icon={<SearchIcon />}
           value={value}
@@ -43,7 +43,7 @@ const Header = () => {
             }
           }}
           onChange={(e) => setValue(e.target.value)}
-          containerClass='w-full md:w-[340px] !rounded-full !bg-base-gray-200'
+          containerClass='w-full !rounded-full !bg-base-gray-200'
           className='text-sm placeholder:text-base-gray-800'
           placeholder='Search for jobs'
         />
