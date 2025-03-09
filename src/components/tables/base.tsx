@@ -30,8 +30,8 @@ const TableBase: React.FC<TableBaseProps> = ({
         <table className={`w-full overflow-x-auto ${className}`} {...tableProps}>
           {children}
         </table>
-        {pagination}
       </div>
+      {pagination}
       {!isLoading && count === 0 && (
         <div className='flex-grow flex items-center justify-center pb-8'>
           <NoData title={emptyTitle} subText={emptyDescription} />
