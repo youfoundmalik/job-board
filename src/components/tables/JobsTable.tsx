@@ -36,7 +36,9 @@ const JobsTable: React.FC<JobsTableProps> = ({ isLoading = false }) => {
       <TableBase
         count={totalItems}
         isLoading={isLoading}
-        pagination={<Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+        pagination={
+          totalPages > 1 && data.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        }
         className='border-separate border-spacing-1/2'
         emptyTitle='No jobs found'
         emptyDescription={

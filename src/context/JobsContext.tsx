@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useMemo, useState } from "react";
+import { createContext, ReactNode, useMemo, useState, useCallback } from "react";
 import { JobModel } from "@/types/job";
 
 // Define the type for our context state
@@ -30,6 +30,11 @@ export function JobsContextProvider({ children }: { children: ReactNode }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  const handleSetJobs = useCallback((newJobs: JobModel[]) => {
+    setCurrentPage(1);
+    setJobs(newJobs);
+  }, []);
+
   // Internal pagination (Api isn't paginated)
   const { paginatedJobs, totalPages, totalItems } = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -48,7 +53,7 @@ export function JobsContextProvider({ children }: { children: ReactNode }) {
       setError(error);
     },
     jobs,
-    setJobs,
+    setJobs: handleSetJobs,
     isLoading,
     setIsLoading,
     currentPage,
